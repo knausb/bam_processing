@@ -7,11 +7,8 @@
 #$ -e bamimp_err
 # #$ -l mem_free=2G
 #$ -V
-# #$ -q !(gbs|grungall1)
 #$ -q !gbs
-# #$ -h
-# #$ -t 1-51:1
-#$ -t 49-51:1
+#$ -t 1-51:1
 
 echo "SGE_TASK_ID: "
 echo $SGE_TASK_ID
@@ -23,7 +20,7 @@ PATH=~/bin/gatk/:$PATH
 
 export _JAVA_OPTIONS="-XX:ParallelGCThreads=1"
 
-BAM=( `cat "./bams2.txt" `)
+BAM=( `cat "./bams.txt" `)
 
 IFS=';' read -a arr <<< "${BAM[$i]}"
 
@@ -79,4 +76,3 @@ date
 echo
 
 # EOF
-
