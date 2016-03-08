@@ -6,8 +6,7 @@ This repository documents how I implement their methodology in our projects on o
 
 The process has several steps.
 
-* Read alignment
-* SAM to BAM, sort and index
+* Read alignment, including SAM to BAM conversion, sort and index
 * Indel realignment and quality adjustment
 * PCR duplicate removal
 
