@@ -37,9 +37,9 @@ echo "Path:"
 echo $PATH
 echo
 
-echo "0: "
+echo "Sample name 0: "
 ${arr[0]}
-echo "1: "
+echo "Input bam 1: "
 ${arr[1]}
 echo "2: "
 ${arr[2]}
