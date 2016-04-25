@@ -2,137 +2,69 @@
 #$ -cwd
 #$ -S /bin/bash
 #$ -N pe
-#$ -o sout
-#$ -e serr
+#$ -e bwa0err
+#$ -o bwa0out
 #$ -q !gbs
 # #$ -l mem_free=10G
 #$ -V
-#$ -t 1-25:1
+# #$ -h
+#$ -t 1-5:1
 
 i=$(expr $SGE_TASK_ID - 1)
 
-#PATH=/raid1/home/bpp/knausb/bin/samtools-0.1.18/bcftools/:$PATH
-
+SAMT="~/bin/samtools-1.1/samtools"
 PATH=~/bin/samtools-1.1:$PATH
-echo "Path:"
 echo $PATH
-echo ""
+echo
 
-REF="/nfs/Grunwald_Lab/home/knausb/pinf_bwa/bwaref/pinf_super_contigs.fa"
+REF="/home/bpp/knausb/Grunwald_Lab/home/knausb/pinf_bwa/bwaref/pinf_super_contigs.fa"
 
-declare -a FWD=(
-'../pinf_fqs/1306_1_pair1.fq.gz'
-'../pinf_fqs/1306_2_pair1.fq.gz'
-'../pinf_fqs/1306_3_pair1.fq.gz'
-'../pinf_fqs/BL2009P4_us23_pair1.fq.gz'
-'../pinf_fqs/blue13_L_name.fq.gz'
-'../pinf_fqs/DDR7602_L.fq.gz'
-'../pinf_fqs/IN2009T1_us22_pair1.fq.gz'
-'../pinf_fqs/LBUS5_L.fq.gz'
-'../pinf_fqs/NL07434_L_name.fq.gz'
-'../pinf_fqs/P10127_fwd.fq.gz'
-'../pinf_fqs/P10650_fwd.fq.gz'
-'../pinf_fqs/P11633_fwd.fq.gz'
-'../pinf_fqs/P12204_fwd.fq.gz'
-'../pinf_fqs/P13527_L.fq.gz'
-'../pinf_fqs/P13626_L.fq.gz'
-'../pinf_fqs/P1362_fwd.fq.gz'
-'../pinf_fqs/P17777us22_L_name.fq.gz'
-'../pinf_fqs/P6096_fwd.fq.gz'
-'../pinf_fqs/P7722_fwd.fq.gz'
-'../pinf_fqs/RS2009P1_us8_pair1.fq.gz'
-'../pinf_fqs/us11_pair1.fq.gz'
-'../pinf_fqs/us22_pair1.fq.gz'
-'../pinf_fqs/us23_pair1.fq.gz'
-'../pinf_fqs/us24_pair1.fq.gz'
-'../pinf_fqs/us8_pair1.fq.gz'
-)
+FILE=( `cat "samples.txt" `)
 
-declare -a REV=(
-'../pinf_fqs/1306_1_pair2.fq.gz'
-'../pinf_fqs/1306_2_pair2.fq.gz'
-'../pinf_fqs/1306_3_pair2.fq.gz'
-'../pinf_fqs/BL2009P4_us23_pair2.fq.gz'
-'../pinf_fqs/blue13_R_name.fq.gz'
-'../pinf_fqs/DDR7602_R.fq.gz'
-'../pinf_fqs/IN2009T1_us22_pair2.fq.gz'
-'../pinf_fqs/LBUS5_R.fq.gz'
-'../pinf_fqs/NL07434_R_name.fq.gz'
-'../pinf_fqs/P10127_rev.fq.gz'
-'../pinf_fqs/P10650_rev.fq.gz'
-'../pinf_fqs/P11633_rev.fq.gz'
-'../pinf_fqs/P12204_rev.fq.gz'
-'../pinf_fqs/P13527_R.fq.gz'
-'../pinf_fqs/P13626_R.fq.gz'
-'../pinf_fqs/P1362_rev.fq.gz'
-'../pinf_fqs/P17777us22_R_name.fq.gz'
-'../pinf_fqs/P6096_rev.fq.gz'
-'../pinf_fqs/P7722_rev.fq.gz'
-'../pinf_fqs/RS2009P1_us8_pair2.fq.gz'
-'../pinf_fqs/us11_pair2.fq.gz'
-'../pinf_fqs/us22_pair2.fq.gz'
-'../pinf_fqs/us23_pair2.fq.gz'
-'../pinf_fqs/us24_pair2.fq.gz'
-'../pinf_fqs/us8_pair2.fq.gz'
-)
+IFS=';' read -a arr <<< "${FILE[$i]}"
 
-declare -a NAMES=(
-'1306_1'
-'1306_2'
-'1306_3'
-'BL2009P4_us23'
-'blue13'
-'DDR7602'
-'IN2009T1_us22'
-'LBUS5'
-'NL07434'
-'P10127'
-'P10650'
-'P11633'
-'P12204'
-'P13527'
-'P13626'
-'P1362'
-'P17777us22'
-'P6096'
-'P7722'
-'RS2009P1_us8'
-'us11'
-'us22'
-'us23'
-'us24'
-'us8'
-)
+echo "${arr[1]}"
+
+echo -n "Running on: "
+hostname
+echo "SGE job id: $JOB_ID"
+date
+
+# Align reads with bwa.
+CMD="~/bin/bwa-0.7.10/bwa mem -M -R @RG'\t'ID:${arr[0]}'\t'SM:${arr[0]} $REF ${arr[1]} ${arr[2]} > sams/${arr[0]}.sam"
+#echo $CMD
+#eval $CMD
 
 date
 
-~/bin/bwa-0.7.10/bwa mem -M -R '@RG\tID:'${NAMES[$i]}'\tSM:'${NAMES[$i]} $REF ${FWD[$i]} ${REV[$i]} > 'sams/'${NAMES[$i]}'.sam' 
 
-date
+# Echo samtools version info.
+CMD="$SAMT --version"
+#eval $CMD
 
-CMD="samtools view -bS -o bams/${NAMES[$i]}.bam sams/${NAMES[$i]}.sam"
-echo $CMD
-$CMD
+# view
+# -b       output BAM
+# -S       ignored (input format is auto-detected)
+# -u       uncompressed BAM output (implies -b)
 
-CMD="samtools sort bams/${NAMES[$i]}.bam bams/${NAMES[$i]}.sorted"
-echo $CMD
-$CMD
+# sort
+# -n         Sort by read name
+# -o FILE  output file name [stdout]
+# -O FORMAT  Write output as FORMAT ('sam'/'bam'/'cram')   (either -O or
+# -T PREFIX  Write temporary files to PREFIX.nnnn.bam       -T is required)
 
-CMD="samtools index bams/${NAMES[$i]}.sorted.bam"
-echo $CMD
-$CMD
+# fillmd
+# -u       uncompressed BAM output (for piping)
 
-CMD="samtools view -bSu sams/${NAMES[$i]}.sam | samtools sort -n -O bam -T bams/${NAMES[$i]}_samtools_nsort_tmp | samtools fixmate /dev/stdin bams/${NAMES[$i]}.fmsorted.bam"
-echo $CMD
-eval $CMD
+# Fix mate information and add the MD tag.
+CMD="$SAMT view -bSu sams/${arr[0]}.sam | $SAMT sort -n -O bam -o bams/${arr[0]}_nsort -T bams/${arr[0]}_nsort_tmp"
+#echo $CMD
+#eval $CMD
 
-CMD="samtools sort -O bam -T bams/${NAMES[$i]}_samtools_csort_tmp -o bams/${NAMES[$i]}_csort.bam bams/${NAMES[$i]}.fmsorted.bam"
-echo $CMD
-eval $CMD
+CMD="$SAMT fixmate -O bam bams/${arr[0]}_nsort /dev/stdout | $SAMT sort -O bam -o - -T bams/${arr[0]}_csort_tmp | $SAMT fillmd -u - $REF > bams/${arr[0]}_fixed.bam"
+#echo $CMD
+#eval $CMD
 
-CMD="samtools index bams/${NAMES[$i]}_csort.bam"
-echo $CMD
-eval $CMD
 
 echo "Samtools done"
 
