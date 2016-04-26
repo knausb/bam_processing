@@ -41,9 +41,9 @@ echo $PATH
 echo
 
 echo "Sample name 0: "
-${arr[0]}
+echo ${arr[0]}
 echo "Input bam file 1: "
-${arr[1]}
+echo ${arr[1]}
 echo
 echo
 
