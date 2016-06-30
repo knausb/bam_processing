@@ -1,9 +1,9 @@
 #!/bin/bash
 #$ -cwd
 #$ -S /bin/bash
-#$ -N pe
-#$ -e bwa0err
-#$ -o bwa0out
+#$ -N align
+#$ -e align0err
+#$ -o align0out
 #$ -q !gbs
 # #$ -l mem_free=10G
 #$ -V
@@ -12,7 +12,10 @@
 
 i=$(expr $SGE_TASK_ID - 1)
 
+# http://bio-bwa.sourceforge.net/bwa.shtml
+BWA="~/bin/bwa-0.7.10/bwa"
 SAMT="~/bin/samtools-1.1/samtools"
+
 PATH=~/bin/samtools-1.1:$PATH
 echo $PATH
 echo
@@ -69,3 +72,5 @@ CMD="$SAMT fixmate -O bam bams/${arr[0]}_nsort /dev/stdout | $SAMT sort -O bam -
 echo "Samtools done"
 
 date
+
+# EOF.
