@@ -34,7 +34,11 @@ echo "SGE job id: $JOB_ID"
 date
 
 # Align reads with bwa.
-CMD="~/bin/bwa-0.7.10/bwa mem -M -R @RG'\t'ID:${arr[0]}'\t'SM:${arr[0]} $REF ${arr[1]} ${arr[2]} > sams/${arr[0]}.sam"
+#CMD="~/bin/bwa-0.7.10/bwa mem -M -R @RG'\t'ID:${arr[0]}'\t'SM:${arr[0]} $REF ${arr[1]} ${arr[2]} > sams/${arr[0]}.sam"
+RG="@RG'\t'ID:${arr[0]}'\tPL:illumina\tPU:${arr[0]}\tLB:${arr[0]}\t'SM:${arr[0]}"
+CMD="$BWA mem -M -R $RG $REF ${arr[1]} ${arr[2]} > sams/${arr[0]}.sam"
+
+
 #echo $CMD
 #eval $CMD
 
