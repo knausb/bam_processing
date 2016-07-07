@@ -14,6 +14,8 @@ i=$(expr $SGE_TASK_ID - 1)
 
 # http://bio-bwa.sourceforge.net/bwa.shtml
 BWA="~/bin/bwa-0.7.10/bwa"
+
+# http://www.htslib.org/doc/
 SAMT="~/bin/samtools-1.1/samtools"
 
 PATH=~/bin/samtools-1.1:$PATH
