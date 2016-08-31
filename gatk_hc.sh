@@ -19,7 +19,10 @@
 
 i=$(expr $SGE_TASK_ID - 1)
 
-PATH=~/bin/gatk/:$PATH
+#PATH=~/bin/gatk/:$PATH
+
+JAVA="/home/bpp/knausb/bin/javadir/jre1.8.0_25/bin/java"
+GATK="~/bin/gatk/GenomeAnalysisTK.jar"
 
 # Input file containing sample files.
 #BAMS=( `cat "../bams4.txt" `)
@@ -44,9 +47,11 @@ export _JAVA_OPTIONS="-XX:ParallelGCThreads=1"
 
 # https://www.broadinstitute.org/gatk/guide/article?id=38
 
-CMD="/home/bpp/knausb/bin/javadir/jre1.7.0_71/bin/java -Xmx2g \
-     -jar /home/bpp/knausb/bin/gatk/GenomeAnalysisTK.jar \
-     -T HaplotypeCaller -R $REF -L Supercontig_1.$SGE_TASK_ID \
+CMD="$JAVA -Xmx2g -Djava.io.tmpdir=/data/ \
+     -jar $GATK \
+     -T HaplotypeCaller \
+     -R $REF \
+     -L Supercontig_1.$SGE_TASK_ID \
      -I bams4.list \
      -o gatk_hc/sc_1.$SGE_TASK_ID.vcf"
 
