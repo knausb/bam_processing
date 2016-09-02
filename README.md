@@ -50,6 +50,7 @@ Reads that begin at the same position may be considered to be duplicates created
 It may be desireable to manage these.
 They can be either marked with Picard or removed with SAMtools.
 
+This step is not very intensive so no retained files are necessary.
 
 
 ## Variant calling
@@ -58,5 +59,13 @@ Variant calling is currently performed using several steps from the GATK.
 First, a genomic variant call format (gVCF) file is created for each sample.
 Processing of each sample independently allows for the specification of different ploidys for different samples.
 Then these gVCF files are used to call variants.
+We use the HaplotypeCaller with the --emitRefConfidence GVCF option.
+This results in a **.g.vcf** file.
+Once we have a set of gVCF files we can call GenotypeGVCFs to call variants.
+
+### Retained files:
+.g.vcf file for each sample and a .vcf file containing the final variants.
+
+
 
 
