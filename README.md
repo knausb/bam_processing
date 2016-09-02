@@ -61,7 +61,7 @@ Processing of each sample independently allows for the specification of differen
 Then these gVCF files are used to call variants.
 We use the HaplotypeCaller with the --emitRefConfidence GVCF option.
 This results in a **.g.vcf** file.
-Once we have a set of gVCF files we can call GenotypeGVCFs to call variants.
+Once we have a set of gVCF files we can call GenotypeGVCFs to call variants which results in a VCF file.
 
 ### Retained files:
 .g.vcf file for each sample and a .vcf file containing the final variants.
