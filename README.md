@@ -21,10 +21,10 @@ This will generate an out file named **_nsort**.
 This file is resorted resulting in a **_fixed.bam** file.
 
 ### Retained file:
-**_fixed.bam**.
+_fixed.bam.
 
 ### Removed files:
-**_nsort**, **_nsort_tmp**, **_csort_tmp**.
+_nsort, _nsort_tmp, _csort_tmp.
 (_tmp files should be automatically removed.)
 
 
@@ -39,14 +39,24 @@ This results in a **_realigned.bam** file.
 Finally, SAMtools calmd is used resulting in a **_calmd.bam** file.
 
 ### Retained files:
-**.intervals** and **_calmd.bam**.
+.intervals and _calmd.bam.
 
 ### Removed files:
-**_realigned.bam**
+_realigned.bam
 
 ## PCR duplicate removal
 
+Reads that begin at the same position may be considered to be duplicates created by PCR.
+It may be desireable to manage these.
+They can be either marked with Picard or removed with SAMtools.
+
+
 
 ## Variant calling
+
+Variant calling is currently performed using several steps from the GATK.
+First, a genomic variant call format (gVCF) file is created for each sample.
+Processing of each sample independently allows for the specification of different ploidys for different samples.
+Then these gVCF files are used to call variants.
 
 
