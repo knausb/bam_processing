@@ -11,3 +11,30 @@ The process has several steps.
 * PCR duplicate removal
 
 
+## Read alignment
+
+Read alignment is currently performed using bwa, however there are a number of options here.
+Read alignment uses fastq (**.fastq.gz**) files as input and a SAM file (**.sam**) is output.
+Subsequent to read alignment, a few steps are performed with SAMtools.
+First we fix mate information and add the MD tag.
+This will generate an out file named **_nsort**.
+This file is resorted resulting in a **_fixed.bam** file.
+
+
+## Indel realignment
+
+Indels may create alignment issues and these issues may be inconsistent among read mappings.
+Here we realign the reads around indels.
+First we use RealignerTargetCreator to identify indels.
+This results in a **.intervals** file for each sample.
+We then use IndelRealigner to perform local realignments.
+This results in a **_realigned.bam** file.
+Finally, SAMtools calmd is used resulting in a **_calmd file**.
+
+
+## PCR duplicate removal
+
+
+## Variant calling
+
+
