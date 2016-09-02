@@ -63,7 +63,7 @@ We use the HaplotypeCaller with the --emitRefConfidence GVCF option.
 This results in a **.g.vcf** file.
 Once we have a set of gVCF files we can call GenotypeGVCFs to call variants which results in a VCF file.
 
-### Retained files:
+Retained files:
 .g.vcf file for each sample and a .vcf file containing the final variants.
 
 
