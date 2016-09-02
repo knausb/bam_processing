@@ -20,11 +20,11 @@ First we fix mate information and add the MD tag.
 This will generate an out file named **_nsort**.
 This file is resorted resulting in a **_fixed.bam** file.
 
-### Retained file:
-_fixed.bam.
+**Retained file:**
+\*_fixed.bam.
 
-### Removed files:
-_nsort, _nsort_tmp, _csort_tmp.
+**Removed files:**
+\*_nsort, \*_nsort_tmp, \*_csort_tmp.
 (_tmp files should be automatically removed.)
 
 
@@ -38,11 +38,11 @@ We then use IndelRealigner to perform local realignments.
 This results in a **_realigned.bam** file.
 Finally, SAMtools calmd is used resulting in a **_calmd.bam** file.
 
-### Retained files:
-.intervals and _calmd.bam.
+**Retained files:**
+\*.intervals and \*_calmd.bam.
 
-### Removed files:
-_realigned.bam
+**Removed files:**
+\*_realigned.bam
 
 ## PCR duplicate removal
 
@@ -63,8 +63,8 @@ We use the HaplotypeCaller with the --emitRefConfidence GVCF option.
 This results in a **.g.vcf** file.
 Once we have a set of gVCF files we can call GenotypeGVCFs to call variants which results in a VCF file.
 
-Retained files:
-.g.vcf file for each sample and a .vcf file containing the final variants.
+**Retained files:**
+\*.g.vcf file for each sample and a \*.vcf file containing the final variants.
 
 
 
