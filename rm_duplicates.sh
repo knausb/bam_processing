@@ -31,9 +31,9 @@ echo
 
 samtools --version
 
-CMD="samtools calmd -Erb bams/${FILE[$i]} $REF > calmd/${FILE[$i]}"
-echo $CMD
-eval $CMD
+#CMD="samtools calmd -Erb bams/${FILE[$i]} $REF > calmd/${FILE[$i]}"
+#echo $CMD
+#eval $CMD
 
 CMD="samtools rmdup calmd/${FILE[$i]} rmdup/${FILE[$i]}"
 echo $CMD
