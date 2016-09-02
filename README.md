@@ -20,8 +20,15 @@ First we fix mate information and add the MD tag.
 This will generate an out file named **_nsort**.
 This file is resorted resulting in a **_fixed.bam** file.
 
+### Retained file:
+**_fixed.bam**.
 
-## Indel realignment
+### Removed files:
+**_nsort**, **_nsort_tmp**, **_csort_tmp**.
+(_tmp files should be automatically removed.)
+
+
+## BAM improvement (indel realignment)
 
 Indels may create alignment issues and these issues may be inconsistent among read mappings.
 Here we realign the reads around indels.
@@ -29,8 +36,13 @@ First we use RealignerTargetCreator to identify indels.
 This results in a **.intervals** file for each sample.
 We then use IndelRealigner to perform local realignments.
 This results in a **_realigned.bam** file.
-Finally, SAMtools calmd is used resulting in a **_calmd file**.
+Finally, SAMtools calmd is used resulting in a **_calmd.bam** file.
 
+### Retained files:
+**.intervals** and **_calmd.bam**.
+
+### Removed files:
+**_realigned.bam**
 
 ## PCR duplicate removal
 
