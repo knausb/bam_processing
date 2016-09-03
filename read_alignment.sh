@@ -24,6 +24,15 @@ echo
 
 REF="/home/bpp/knausb/Grunwald_Lab/home/knausb/pinf_bwa/bwaref/pinf_super_contigs.fa"
 
+# The file samples.txt contains info about sample names and files.
+# Each line is one sample and one job.
+# The line is a semi colon delimited list.
+# The first element is the sample name.
+# The second element is the fastq file including any path info.
+#
+# t30-4;../fastqs/ATCGGC.fastq.gz
+#
+
 FILE=( `cat "samples.txt" `)
 
 IFS=';' read -a arr <<< "${FILE[$i]}"
@@ -41,9 +50,7 @@ date
 # Report version info.
 CMD="$BWA"
 echo
-#
 echo $CMD
-#
 eval $CMD
 echo
 
