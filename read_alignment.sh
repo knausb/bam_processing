@@ -58,7 +58,7 @@ echo
 #RG="@RG'\t'ID:${arr[0]}'\tPL:illumina\tPU:${arr[0]}\tLB:${arr[0]}\t'SM:${arr[0]}"
 RG="@RG\tID:${arr[0]}\tLB:${arr[0]}\tPL:illumina\tSM:${arr[0]}\tPU:${arr[0]}"
 
-CMD="$BWA mem -M -R $RG $REF ${arr[1]} ${arr[2]} > sams/${arr[0]}.sam"
+CMD="$BWA mem -M -R \"$RG\" $REF ${arr[1]} ${arr[2]} > sams/${arr[0]}.sam"
 
 echo
 #
@@ -71,7 +71,9 @@ date
 # http://www.htslib.org/doc/
 # Echo samtools version info.
 CMD="$SAMT --version"
+echo
 eval $CMD
+echo
 
 # view
 # -b       output BAM
