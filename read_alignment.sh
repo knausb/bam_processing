@@ -54,8 +54,9 @@ echo $CMD
 eval $CMD
 echo
 
-#CMD="~/bin/bwa-0.7.10/bwa mem -M -R @RG'\t'ID:${arr[0]}'\t'SM:${arr[0]} $REF ${arr[1]} ${arr[2]} > sams/${arr[0]}.sam"
-#RG="@RG'\t'ID:${arr[0]}'\tPL:illumina\tPU:${arr[0]}\tLB:${arr[0]}\t'SM:${arr[0]}"
+# The GATK needs read group info:
+# https://software.broadinstitute.org/gatk/guide/article?id=6472
+
 RG="@RG\tID:${arr[0]}\tLB:${arr[0]}\tPL:illumina\tSM:${arr[0]}\tPU:${arr[0]}"
 
 CMD="$BWA mem -M -R \"$RG\" $REF ${arr[1]} ${arr[2]} > sams/${arr[0]}.sam"
