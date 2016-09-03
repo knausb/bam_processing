@@ -48,7 +48,7 @@ date
 # Align reads with bwa.
 
 # Report version info.
-CMD="$BWA"
+CMD="$BWA 2>&1"
 echo
 echo $CMD
 eval $CMD
@@ -60,16 +60,18 @@ RG="@RG\tID:${arr[0]}\tLB:${arr[0]}\tPL:illumina\tSM:${arr[0]}\tPU:${arr[0]}"
 
 CMD="$BWA mem -M -R $RG $REF ${arr[1]} ${arr[2]} > sams/${arr[0]}.sam"
 
+echo
 #
 echo $CMD
 #eval $CMD
+echo
 
 date
 
 # http://www.htslib.org/doc/
 # Echo samtools version info.
 CMD="$SAMT --version"
-#eval $CMD
+eval $CMD
 
 # view
 # -b       output BAM
@@ -94,7 +96,9 @@ CMD="$SAMT fixmate -O bam bams/${arr[0]}_nsort /dev/stdout | $SAMT sort -O bam -
 #echo $CMD
 #eval $CMD
 
+echo
 echo "Samtools done"
+echo
 
 date
 
