@@ -37,14 +37,24 @@ date
 
 # http://bio-bwa.sourceforge.net/bwa.shtml
 # Align reads with bwa.
+
+# Report version info.
+CMD="$BWA"
+echo
+#
+echo $CMD
+#
+eval $CMD
+echo
+
 #CMD="~/bin/bwa-0.7.10/bwa mem -M -R @RG'\t'ID:${arr[0]}'\t'SM:${arr[0]} $REF ${arr[1]} ${arr[2]} > sams/${arr[0]}.sam"
 #RG="@RG'\t'ID:${arr[0]}'\tPL:illumina\tPU:${arr[0]}\tLB:${arr[0]}\t'SM:${arr[0]}"
 RG="@RG\tID:${arr[0]}\tLB:${arr[0]}\tPL:illumina\tSM:${arr[0]}\tPU:${arr[0]}"
 
 CMD="$BWA mem -M -R $RG $REF ${arr[1]} ${arr[2]} > sams/${arr[0]}.sam"
 
-
-#echo $CMD
+#
+echo $CMD
 #eval $CMD
 
 date
@@ -76,7 +86,6 @@ CMD="$SAMT view -bSu sams/${arr[0]}.sam | $SAMT sort -n -O bam -o bams/${arr[0]}
 CMD="$SAMT fixmate -O bam bams/${arr[0]}_nsort /dev/stdout | $SAMT sort -O bam -o - -T bams/${arr[0]}_csort_tmp | $SAMT fillmd -u - $REF > bams/${arr[0]}_fixed.bam"
 #echo $CMD
 #eval $CMD
-
 
 echo "Samtools done"
 
