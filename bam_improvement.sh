@@ -10,6 +10,13 @@
 #$ -q !gbs
 #$ -t 1-5:1
 
+# Note that the Broad no longer recommends indel realignment.
+# As such, this script may be considered deprecated.
+#
+# https://software.broadinstitute.org/gatk/gatkdocs/org_broadinstitute_gatk_tools_walkers_indels_RealignerTargetCreator.php
+
+
+
 echo "SGE_TASK_ID: "
 echo $SGE_TASK_ID
 echo
