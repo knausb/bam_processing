@@ -42,7 +42,7 @@ eval $CMD
 # https://www.broadinstitute.org/gatk/documentation/tooldocs/org_broadinstitute_gatk_tools_walkers_haplotypecaller_HaplotypeCaller.php
 # https://www.broadinstitute.org/gatk/documentation/tooldocs/org_broadinstitute_gatk_tools_walkers_variantutils_GenotypeGVCFs.php
 
-CMD="$JAVA -jar $GATK \
+CMD="$JAVA -jar $GATK -Djava.io.tmpdir=/data/ \
   -T HaplotypeCaller \
   -R $REF \
   --emitRefConfidence GVCF \
