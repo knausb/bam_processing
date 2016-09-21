@@ -25,18 +25,30 @@ GATK="/home/bpp/knausb/bin/gatk/GenomeAnalysisTK-3.5.jar"
 
 REF="/home/bpp/knausb/Grunwald_Lab/home/knausb/bjk_pinf_ref/pinf_super_contigs.fa"
 
-FILE=( `cat "bams1.txt" `)
+FILE=( `cat "samples.txt" `)
 
-IFS=',' read -r -a arr <<< "${FILE[$i]}"
+IFS=';' read -r -a arr <<< "${FILE[$i]}"
 
 echo -n "Running on: "
 hostname
 echo "SGE job id: $JOB_ID"
 date
+echo
 
 CMD="$JAVA -version"
 echo $CMD
 eval $CMD
+echo
+
+CMD="$JAVA -jar $GATK --version"
+echo $CMD
+eval $CMD
+echo
+
+CMD="$JAVA -jar $GATK -T HaplotypeCaller --version"
+echo $CMD
+eval $CMD
+echo
 
 # https://www.broadinstitute.org/gatk/documentation/article?id=3893
 # https://www.broadinstitute.org/gatk/documentation/tooldocs/org_broadinstitute_gatk_tools_walkers_haplotypecaller_HaplotypeCaller.php
@@ -48,7 +60,7 @@ CMD="$JAVA -jar $GATK -Djava.io.tmpdir=/data/ \
   --emitRefConfidence GVCF \
   -ploidy 2 \
   -I RGbams/${arr[0]}.bam \
-  -o gvcf/${arr[0]}.g.vcf"
+  -o gvcf/${arr[0]}_2n.g.vcf"
 
 echo $CMD
 eval $CMD
