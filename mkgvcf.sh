@@ -49,6 +49,9 @@ echo
 # https://www.broadinstitute.org/gatk/documentation/tooldocs/org_broadinstitute_gatk_tools_walkers_haplotypecaller_HaplotypeCaller.php
 # https://www.broadinstitute.org/gatk/documentation/tooldocs/org_broadinstitute_gatk_tools_walkers_variantutils_GenotypeGVCFs.php
 
+# Note that Haplotypecaller requires an indexed bam.
+# If yours is not, use SAMtools.
+
 CMD="$JAVA -Djava.io.tmpdir=/data/ -jar $GATK \
   -T HaplotypeCaller \
   -R $REF \
