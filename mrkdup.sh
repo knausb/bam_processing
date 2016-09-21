@@ -26,6 +26,7 @@ echo -n "Running on: "
 hostname
 echo "SGE job id: $JOB_ID"
 date
+echo
 
 CMD="$JAVA -version"
 echo $CMD
