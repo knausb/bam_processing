@@ -45,16 +45,11 @@ echo $CMD
 eval $CMD
 echo
 
-CMD="$JAVA -jar $GATK -T HaplotypeCaller --version"
-echo $CMD
-eval $CMD
-echo
-
 # https://www.broadinstitute.org/gatk/documentation/article?id=3893
 # https://www.broadinstitute.org/gatk/documentation/tooldocs/org_broadinstitute_gatk_tools_walkers_haplotypecaller_HaplotypeCaller.php
 # https://www.broadinstitute.org/gatk/documentation/tooldocs/org_broadinstitute_gatk_tools_walkers_variantutils_GenotypeGVCFs.php
 
-CMD="$JAVA -jar $GATK -Djava.io.tmpdir=/data/ \
+CMD="$JAVA -Djava.io.tmpdir=/data/ -jar $GATK \
   -T HaplotypeCaller \
   -R $REF \
   --emitRefConfidence GVCF \
