@@ -1,0 +1,6 @@
+t30-4;../../pinf_fqs/t30-4.fq.gz
+90128;../../pinf_fqs/90128.fq.gz
+PIC99189;../../pinf_fqs/pic99189.fq.gz
+PIC99114;../../../../web_data/raffaele2010/one_file/PIC99114.fastq.gz
+PIC99167;../../../../web_data/raffaele2010/one_file/PIC99167.fastq.gz
+F18;../../../../web_data/raffaele2010/one_file/F18.fastq.gz
