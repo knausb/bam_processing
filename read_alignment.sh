@@ -8,7 +8,7 @@
 # #$ -l mem_free=10G
 #$ -V
 # #$ -h
-#$ -t 1-5:1
+#$ -t 1-2:1
 
 i=$(expr $SGE_TASK_ID - 1)
 
@@ -16,13 +16,24 @@ i=$(expr $SGE_TASK_ID - 1)
 BWA="~/bin/bwa-0.7.10/bwa"
 
 # http://www.htslib.org/doc/
-SAMT="~/bin/samtools-1.1/samtools"
+#SAMT="~/bin/samtools-1.1/samtools"
+SAMT="~/bin/samtools-1.3.1/samtools"
 
-PATH=~/bin/samtools-1.1:$PATH
+echo "PATH:"
+PATH=~/bin/samtools-1.3.1:$PATH
 echo $PATH
 echo
 
-REF="/home/bpp/knausb/Grunwald_Lab/home/knausb/pinf_bwa/bwaref/pinf_super_contigs.fa"
+JAVA="/home/bpp/knausb/bin/javadir/jre1.8.0_25/bin/java"
+
+# http://broadinstitute.github.io/picard/
+# http://broadinstitute.github.io/picard/command-line-overview.html
+PIC="~/bin/picard/picard-tools-2.5.0/picard.jar"
+
+
+#REF="/home/bpp/knausb/Grunwald_Lab/home/knausb/pinf_bwa/bwaref/pinf_super_contigs.fa"
+REF="bwaref/pinfsc50b.fa"
+
 
 # The file samples.txt contains info about sample names and files.
 # Each line is one sample and one job.
@@ -43,6 +54,7 @@ echo -n "Running on: "
 hostname
 echo "SGE job id: $JOB_ID"
 date
+echo
 
 # http://bio-bwa.sourceforge.net/bwa.shtml
 # Align reads with bwa.
@@ -64,7 +76,8 @@ CMD="$BWA mem -M -R \"$RG\" $REF ${arr[1]} ${arr[2]} > sams/${arr[0]}.sam"
 echo
 #
 echo $CMD
-#eval $CMD
+#
+eval $CMD
 echo
 
 date
@@ -90,15 +103,30 @@ echo
 # fillmd
 # -u       uncompressed BAM output (for piping)
 
+# Generate stats to validate the sam.
+CMD="$SAMT stats sams/${arr[0]}.sam | gzip -c > sams/${arr[0]}_stats.txt.gz"
+echo $CMD
+eval $CMD
+
 # Fix mate information and add the MD tag.
 CMD="$SAMT view -bSu sams/${arr[0]}.sam | $SAMT sort -n -O bam -o bams/${arr[0]}_nsort -T bams/${arr[0]}_nsort_tmp"
-#echo $CMD
-#eval $CMD
+#
+echo $CMD
+#
+eval $CMD
 
 # CMD="$SAMT fixmate -O bam bams/${arr[0]}_nsort /dev/stdout | $SAMT sort -O bam -o - -T bams/${arr[0]}_csort_tmp | $SAMT fillmd -u - $REF > bams/${arr[0]}_fixed.bam"
 CMD="$SAMT fixmate -O bam bams/${arr[0]}_nsort /dev/stdout | $SAMT sort -O bam -o - -T bams/${arr[0]}_csort_tmp | $SAMT fillmd -u - $REF | $SAMT view -b > bams/${arr[0]}_fixed.bam"
-#echo $CMD
-#eval $CMD
+#
+echo $CMD
+#
+eval $CMD
+
+# Generate stats to validate the bam.
+CMD="$SAMT stats bams/${arr[0]}_fixed.bam | gzip -c > bams/${arr[0]}_fixed_stats.txt.gz"
+echo $CMD
+eval $CMD
+
 
 echo
 echo "Samtools done"
@@ -108,10 +136,39 @@ date
 
 # Mark duplicates.
 
+CMD="$JAVA -version 2>&1"
+echo $CMD
+eval $CMD
+echo
 
+CMD="$JAVA -jar $PIC MarkDuplicates --version 2>&1"
+echo $CMD
+eval $CMD
+echo
+
+CMD="$JAVA -Djava.io.tmpdir=/data/ \
+     -jar $PIC MarkDuplicates \
+     I=bams/${arr[0]}_fixed.bam \
+     O=bams/${arr[0]}_dupmrk.bam \
+     M=bams/${arr[0]}_marked_dup_metrics.txt"
+
+date
+echo
+echo $CMD
+eval $CMD
+date
 
 # Index
+CMD="$SAMT index bams/${arr[0]}_dupmrk.bam"
 
+echo $CMD
+eval $CMD
+date
+
+# Generate stats to validate the bam.
+CMD="$SAMT stats bams/${arr[0]}_dupmrk.bam | gzip -c > bams/${arr[0]}_dupmrk_stats.txt.gz"
+echo $CMD
+eval $CMD
 
 
 # EOF.
