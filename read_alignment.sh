@@ -30,10 +30,8 @@ JAVA="/home/bpp/knausb/bin/javadir/jre1.8.0_25/bin/java"
 # http://broadinstitute.github.io/picard/command-line-overview.html
 PIC="~/bin/picard/picard-tools-2.5.0/picard.jar"
 
-
 #REF="/home/bpp/knausb/Grunwald_Lab/home/knausb/pinf_bwa/bwaref/pinf_super_contigs.fa"
 REF="bwaref/pinfsc50b.fa"
-
 
 # The file samples.txt contains info about sample names and files.
 # Each line is one sample and one job.
@@ -45,9 +43,7 @@ REF="bwaref/pinfsc50b.fa"
 #
 
 FILE=( `cat "samples.txt" `)
-
 IFS=';' read -a arr <<< "${FILE[$i]}"
-
 echo "${arr[1]}"
 
 echo -n "Running on: "
@@ -100,7 +96,10 @@ echo
 # -O FORMAT  Write output as FORMAT ('sam'/'bam'/'cram')   (either -O or
 # -T PREFIX  Write temporary files to PREFIX.nnnn.bam       -T is required)
 
-# fillmd
+# fillmd (deprecated, see calmd)
+# -u       uncompressed BAM output (for piping)
+
+# calmd
 # -u       uncompressed BAM output (for piping)
 
 # Generate stats to validate the sam.
@@ -109,6 +108,9 @@ echo $CMD
 eval $CMD
 
 # Fix mate information and add the MD tag.
+# http://samtools.github.io/hts-specs/
+# MD = String for mismatching positions
+# NM = Edit distance to the reference
 CMD="$SAMT view -bSu sams/${arr[0]}.sam | $SAMT sort -n -O bam -o bams/${arr[0]}_nsort -T bams/${arr[0]}_nsort_tmp"
 #
 echo $CMD
@@ -116,7 +118,9 @@ echo $CMD
 eval $CMD
 
 # CMD="$SAMT fixmate -O bam bams/${arr[0]}_nsort /dev/stdout | $SAMT sort -O bam -o - -T bams/${arr[0]}_csort_tmp | $SAMT fillmd -u - $REF > bams/${arr[0]}_fixed.bam"
-CMD="$SAMT fixmate -O bam bams/${arr[0]}_nsort /dev/stdout | $SAMT sort -O bam -o - -T bams/${arr[0]}_csort_tmp | $SAMT fillmd -u - $REF | $SAMT view -b > bams/${arr[0]}_fixed.bam"
+# CMD="$SAMT fixmate -O bam bams/${arr[0]}_nsort /dev/stdout | $SAMT sort -O bam -o - -T bams/${arr[0]}_csort_tmp | $SAMT fillmd -u - $REF | $SAMT view -b > bams/${arr[0]}_fixed.bam"
+CMD="$SAMT fixmate -O bam bams/${arr[0]}_nsort /dev/stdout | $SAMT sort -O bam -o - -T bams/${arr[0]}_csort_tmp | $SAMT calmd -u - $REF | $SAMT view -b > bams/${arr[0]}_fixed.bam"
+
 #
 echo $CMD
 #
@@ -126,7 +130,6 @@ eval $CMD
 CMD="$SAMT stats bams/${arr[0]}_fixed.bam | gzip -c > bams/${arr[0]}_fixed_stats.txt.gz"
 echo $CMD
 eval $CMD
-
 
 echo
 echo "Samtools done"
@@ -155,20 +158,21 @@ CMD="$JAVA -Djava.io.tmpdir=/data/ \
 date
 echo
 echo $CMD
+#
 eval $CMD
 date
 
 # Index
 CMD="$SAMT index bams/${arr[0]}_dupmrk.bam"
-
 echo $CMD
+#
 eval $CMD
 date
 
 # Generate stats to validate the bam.
 CMD="$SAMT stats bams/${arr[0]}_dupmrk.bam | gzip -c > bams/${arr[0]}_dupmrk_stats.txt.gz"
 echo $CMD
+#
 eval $CMD
-
 
 # EOF.
