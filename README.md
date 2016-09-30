@@ -6,9 +6,7 @@ This repository documents how I implement their methodology in our projects on o
 
 The process has several steps.
 
-* Read alignment, including SAM to BAM conversion, sort and index
-* No longer recommended: Indel realignment and quality adjustment - requires **known** variants, which we typically lack so this step is omitted
-* PCR duplicate mark/removal
+* Read alignment, including SAM to BAM conversion, sort and index. This step now includes fixing matepair data, adding MD and NM tags as well as marking PCR duplicates.
 * gVCF creation
 
 
@@ -20,38 +18,14 @@ Subsequent to read alignment, a few steps are performed with SAMtools.
 First we fix mate information and add the MD tag.
 This will generate an out file named **_nsort**.
 This file is resorted resulting in a **_fixed.bam** file.
+This fixed file then has PCR duplicates marked, is indexed and this step is complete.
 
 **Retained file:**
-\*_fixed.bam.
+\*_mrkdup.bam.
 
 **Removed files:**
-\*_nsort, \*_nsort_tmp, \*_csort_tmp.
+\*_nsort, \*_nsort_tmp, \*_csort_tmp, \*_fixed.bam..
 (_tmp files should be automatically removed.)
-
-
-## BAM improvement (indel realignment)
-
-Indels may create alignment issues and these issues may be inconsistent among read mappings.
-Here we realign the reads around indels.
-First we use RealignerTargetCreator to identify indels.
-This results in a **.intervals** file for each sample.
-We then use IndelRealigner to perform local realignments.
-This results in a **_realigned.bam** file.
-Finally, SAMtools calmd is used resulting in a **_calmd.bam** file.
-
-**Retained files:**
-\*.intervals and \*_calmd.bam.
-
-**Removed files:**
-\*_realigned.bam
-
-## PCR duplicate removal
-
-Reads that begin at the same position may be considered to be duplicates created by PCR.
-It may be desireable to manage these.
-They can be either marked with Picard or removed with SAMtools.
-
-This step is not very intensive so no retained files are necessary.
 
 
 ## Variant calling
