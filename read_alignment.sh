@@ -30,8 +30,9 @@ JAVA="/home/bpp/knausb/bin/javadir/jre1.8.0_25/bin/java"
 # http://broadinstitute.github.io/picard/command-line-overview.html
 PIC="~/bin/picard/picard-tools-2.5.0/picard.jar"
 
-#REF="/home/bpp/knausb/Grunwald_Lab/home/knausb/pinf_bwa/bwaref/pinf_super_contigs.fa"
-REF="bwaref/pinfsc50b.fa"
+#
+REF="/home/bpp/knausb/Grunwald_Lab/home/knausb/pinf_bwa/bwaref/pinf_super_contigs.fa"
+#REF="bwaref/pinfsc50b.fa"
 
 # The file samples.txt contains info about sample names and files.
 # Each line is one sample and one job.
