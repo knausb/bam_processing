@@ -19,6 +19,7 @@ First we fix mate information and add the MD tag.
 This will generate an out file named **_nsort**.
 This file is resorted resulting in a **_fixed.bam** file.
 This fixed file then has PCR duplicates marked, is indexed and this step is complete.
+The program `samtools stats` is called on intermediate *.sam and *.bam files in order to sanity check the processing.
 
 **Retained file:**
 \*_mrkdup.bam.
