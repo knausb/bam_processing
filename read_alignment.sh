@@ -154,6 +154,7 @@ CMD="$JAVA -Djava.io.tmpdir=/data/ \
      -jar $PIC MarkDuplicates \
      I=bams/${arr[0]}_fixed.bam \
      O=bams/${arr[0]}_dupmrk.bam \
+     MAX_FILE_HANDLES_FOR_READ_ENDS_MAP=1000 \
      ASSUME_SORT_ORDER=coordinate \
      M=bams/${arr[0]}_marked_dup_metrics.txt"
 
