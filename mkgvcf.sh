@@ -72,7 +72,7 @@ CMD="$JAVA -Djava.io.tmpdir=/data/ -jar $GATK \
   -I RGbams/${arr[0]}.bam \
   -o gvcf/${arr[0]}_3n.g.vcf.gz"
 
-echo $CMD
-eval $CMD
+#echo $CMD
+#eval $CMD
 
 # EOF.
