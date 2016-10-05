@@ -150,6 +150,15 @@ echo $CMD
 eval $CMD
 echo
 
+
+# http://gatkforums.broadinstitute.org/dsde/discussion/comment/28837/#Comment_28837
+# One thing MarkDuplicates attempts is to identify reads that were physically
+# close to one another on the flow cell.
+# If you got your reads from an online database this information may have been
+# removed from each sequence's header.
+# If this is your case you may want to include:
+# READ_NAME_REGEX=null
+
 CMD="$JAVA -Djava.io.tmpdir=/data/ \
      -jar $PIC MarkDuplicates \
      I=bams/${arr[0]}_fixed.bam \
