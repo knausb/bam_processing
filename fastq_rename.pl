@@ -12,7 +12,7 @@ use Getopt::Std;
 use vars qw( $opt_a $opt_v);
 
 # Usage
-my $usage = "
+my $usage = '
 fastq_rename.pl - manipulate the sequence identifier in a fastq file.
                       by
                 Brian J. Knaus
@@ -31,7 +31,7 @@ Usage: perl fastq_rename.pl options
  optional:
   -v    verbose mode [optional T/F, default is F].
 
-";
+';
 
 # command line processing.
 getopts('a:v:');
@@ -66,9 +66,10 @@ while(<$in>){
   chomp($temp[3] = <$in>);  # Fourth line is quality.
   
   # Manipulate the sequence identifier.
-  @temp2 = split('_', $temp[0]);
-  pop @temp2;
-  $temp[0] = join('_', @temp2);
+  @temp2 = split('\/', $temp[0]);
+
+  $temp[0] = $temp2[0]."/1";
+#  $temp[0] = $temp2[0]."/2";
   
   # Write to file.
   print $out $temp[0]."\n";
