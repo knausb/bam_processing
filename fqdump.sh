@@ -23,12 +23,12 @@ i=$(expr $SGE_TASK_ID - 1)
 
 FQDUMP="/home/bpp/knausb/bin/sratoolkit.2.3.0-centos_linux64/bin/fastq-dump"
 
-FILES=( `ls "*.sra" `)
+FILES=( `ls -1 *.sra `)
 
 date
 echo
 
-CMD="$FQDUMP --gzip --split-files $FILES[$i]"
+CMD="$FQDUMP --gzip --split-files ${FILES[$i]}"
 
 echo $CMD
 # eval $CMD
