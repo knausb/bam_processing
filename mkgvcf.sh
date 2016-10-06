@@ -75,4 +75,8 @@ CMD="$JAVA -Djava.io.tmpdir=/data/ -jar $GATK \
 #echo $CMD
 #eval $CMD
 
+echo
+date
+echo "mkgvcf finished."
+
 # EOF.
