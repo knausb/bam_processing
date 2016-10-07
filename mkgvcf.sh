@@ -57,7 +57,7 @@ CMD="$JAVA -Djava.io.tmpdir=/data/ -jar $GATK \
   -R $REF \
   --emitRefConfidence GVCF \
   -ploidy 2 \
-  -I RGbams/${arr[0]}.bam \
+  -I bams/${arr[0]}_dupmrk.bam \
   -o gvcf/${arr[0]}_2n.g.vcf.gz"
 
 echo $CMD
