@@ -35,7 +35,7 @@ echo "SGE job id: $JOB_ID"
 date
 echo
 
-CMD="$JAVA -version"
+CMD="$JAVA -version 2>&1"
 echo $CMD
 eval $CMD
 echo
