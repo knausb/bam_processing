@@ -65,6 +65,10 @@ echo
 
 # The GATK needs read group info:
 # https://software.broadinstitute.org/gatk/guide/article?id=6472
+# SM: sample
+# LB: library, may be sequenced multiple times
+# ID: Read Group Identifier, a unique identifier
+# PL: Platform/technology used
 
 RG="@RG\tID:${arr[0]}\tLB:${arr[0]}\tPL:illumina\tSM:${arr[0]}\tPU:${arr[0]}"
 
