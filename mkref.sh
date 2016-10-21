@@ -30,8 +30,7 @@ eval $CMD
 
 
 CMD="$JAVA -jar $PIC CreateSequenceDictionary \
-    REFERENCE=$REF \ 
-    OUTPUT=$REF.dict"
+    REFERENCE=$REF OUTPUT=$REF.dict"
 
 echo $CMD
 eval $CMD
