@@ -14,18 +14,13 @@
 #$ -t 11-18179:1
 # $ -t 1-10:1
 
-echo "SGE_TASK_ID: "
-echo $SGE_TASK_ID
-echo
 
 i=$(expr $SGE_TASK_ID - 1)
 
-PATH=~/bin/samtools-1.1/:$PATH
+#PATH=~/bin/samtools-1.1/:$PATH
 
 # http://www.htslib.org/doc/
-SAMT="~/bin/samtools-1.3.1/samtools"
-
-
+SAMT="/raid1/home/bpp/knausb/bin/samtools-1.3.1/samtools"
 
 
 #BAM=( `cat "./bams2.txt" `)
@@ -56,7 +51,7 @@ echo
 #CMD="samtools mpileup -f $REF -b ./bams.txt --positions ../pitg_core_annotations_unique_sc19.bed | gzip > mpileup_core_sc19.txt.gz"
 #CMD="samtools mpileup -f $REF ${arr[1]} --positions pitg_core_annotations_unique_0based.bed | gzip > core_pu/${arr[0]}.mpileup.gz"
 
-CMD="samtools mpileup -b bams.txt -f $REF -r ${CHROM[$i]}:${START[$i]}-${STOP[$i]}  | gzip > pitg_pu/${PITG[$i]}.mpileup.gz"
+CMD="$SAMT mpileup -b bams.txt -f $REF -r ${CHROM[$i]}:${START[$i]}-${STOP[$i]}  | gzip -c > pitg_pu/${PITG[$i]}.mpileup.gz"
 
 echo $CMD
 eval $CMD
