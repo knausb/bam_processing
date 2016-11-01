@@ -52,6 +52,16 @@ echo
 # Note that Haplotypecaller requires an indexed bam.
 # If yours is not, use SAMtools.
 
+# If you're dealing with legacy data you may encounter legacy quality encodings.
+# If you encounter this use:
+#
+# --fix_misencoded_quality_scores
+#
+# In your GATK call. (But only on the offending libraries.)
+# https://software.broadinstitute.org/gatk/gatkdocs/org_broadinstitute_gatk_engine_CommandLineGATK.php#--fix_misencoded_quality_scores
+# https://en.wikipedia.org/wiki/FASTQ_format
+
+
 CMD="$JAVA -Djava.io.tmpdir=/data/ -jar $GATK \
   -T HaplotypeCaller \
   -R $REF \
