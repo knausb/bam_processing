@@ -28,7 +28,7 @@ SAMT="/raid1/home/bpp/knausb/bin/samtools-1.3.1/samtools"
 
 BED="../pitg_1based.bed"
 
-CHROM=( `cut -f1 ` $BED)
+CHROM=( `cut -f1 $BED` )
 START=( `cut -f2 $BED` )
 STOP=( `cut -f3 $BED` )
 PITG=( `cut -f4 $BED` )
