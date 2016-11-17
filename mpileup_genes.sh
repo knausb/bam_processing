@@ -10,9 +10,8 @@
 # #$ -q !(gbs|grungall1)
 #$ -q !gbs
 # #$ -h
-# #$ -t 1-51:1
-#$ -t 11-18179:1
-# $ -t 1-10:1
+# $ -t 11-18179:1
+#$ -t 1-10:1
 
 
 i=$(expr $SGE_TASK_ID - 1)
@@ -26,10 +25,13 @@ SAMT="/raid1/home/bpp/knausb/bin/samtools-1.3.1/samtools"
 #BAM=( `cat "./bams2.txt" `)
 #BED=( `cat "pitg_1based.bed" `)
 
-CHROM=( `cut -f1 pitg_1based.bed` )
-START=( `cut -f2 pitg_1based.bed` )
-STOP=( `cut -f3 pitg_1based.bed` )
-PITG=( `cut -f4 pitg_1based.bed` )
+
+BED="../pitg_1based.bed"
+
+CHROM=( `cut -f1 ` $BED)
+START=( `cut -f2 $BED` )
+STOP=( `cut -f3 $BED` )
+PITG=( `cut -f4 $BED` )
 
 #IFS=';' read -a arr <<< "${BAM[$i]}"
 #IFS='\t' read -a arr <<< "${BED[$i]}"
