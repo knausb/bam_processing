@@ -25,6 +25,7 @@ REF="/home/bpp/knausb/Grunwald_Lab/home/knausb/bjk_pinf_ref/pinf_super_contigs.f
 SAMT="~/bin/samtools-1.3.1/samtools"
 
 SAMPS=("HPM-200" "HPM-527" "HPM-663" "HPM-693" "HPM-867")
+ANNOT="C"
 
 #EVAL="TRUE"
 EVAL="FALSE"
@@ -48,12 +49,12 @@ date
 
 CMD="$JAVA -jar $PIC AddOrReplaceReadGroups \
       I=${SAMPS[$i]}_fixed.bam \
-      O=${SAMPS[$i]}B_fixed.bam \
-      RGID=${SAMPS[$i]}B \
-      RGLB=${SAMPS[$i]}B \
+      O=${SAMPS[$i]}"$ANNOT"_fixed.bam \
+      RGID=${SAMPS[$i]}"$ANNOT" \
+      RGLB=${SAMPS[$i]}"$ANNOT" \
       RGPL=illumina \
-      RGPU=${SAMPS[$i]}B \
-      RGSM=${SAMPS[$i]}B"
+      RGPU=${SAMPS[$i]}"$ANNOT" \
+      RGSM=${SAMPS[$i]}"$ANNOT
 
 echo $CMD
 if [ "$EVAL" == "TRUE" ]; then
@@ -64,7 +65,7 @@ fi
 date
 
 # Index
-CMD="$SAMT index ${SAMPS[$i]}B_fixed.bam"
+CMD="$SAMT index ${SAMPS[$i]}"$ANNOT"_fixed.bam"
 echo $CMD
 #
 if [ "$EVAL" == "TRUE" ]; then
