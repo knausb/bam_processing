@@ -44,14 +44,14 @@ echo
 
 date
 
-java -jar picard.jar AddOrReplaceReadGroups \
+CMD="java -jar picard.jar AddOrReplaceReadGroups \
       I=${SAMPS[$i]}_fixed.bam \
       O=${SAMPS[$i]}B_fixed.bam \
       RGID=${SAMPS[$i]}B \
       RGLB=${SAMPS[$i]}B \
       RGPL=illumina \
       RGPU=${SAMPS[$i]}B \
-      RGSM=${SAMPS[$i]}B
+      RGSM=${SAMPS[$i]}B"
 
 echo $CMD
 eval $CMD
