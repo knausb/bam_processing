@@ -24,8 +24,10 @@ PIC="/home/bpp/knausb/bin/picard/picard-tools-2.5.0/picard.jar"
 REF="/home/bpp/knausb/Grunwald_Lab/home/knausb/bjk_pinf_ref/pinf_super_contigs.fa"
 SAMT="~/bin/samtools-1.3.1/samtools"
 
-SAMPS=("HPM-200", "HPM-527", "HPM-663", "HPM-693", "HPM-867")
+SAMPS=("HPM-200" "HPM-527" "HPM-663" "HPM-693" "HPM-867")
 
+#EVAL="TRUE"
+EVAL="FALSE"
 
 #FILE=( `cat "bams1.txt" `)
 
@@ -44,7 +46,7 @@ echo
 
 date
 
-CMD="java -jar picard.jar AddOrReplaceReadGroups \
+CMD="$JAVA -jar $PIC AddOrReplaceReadGroups \
       I=${SAMPS[$i]}_fixed.bam \
       O=${SAMPS[$i]}B_fixed.bam \
       RGID=${SAMPS[$i]}B \
@@ -54,8 +56,10 @@ CMD="java -jar picard.jar AddOrReplaceReadGroups \
       RGSM=${SAMPS[$i]}B"
 
 echo $CMD
-eval $CMD
-echo
+if [ "$EVAL" == "TRUE" ]; then
+  eval $CMD
+  echo
+fi
 
 date
 
@@ -63,6 +67,10 @@ date
 CMD="$SAMT index ${SAMPS[$i]}B_fixed.bam"
 echo $CMD
 #
-eval $CMD
+if [ "$EVAL" == "TRUE" ]; then
+  eval $CMD
+  echo
+fi
+
 date
 
