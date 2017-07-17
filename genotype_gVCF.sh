@@ -1,4 +1,4 @@
-#$ -S /bin/bash
+#! /bin/bash
 
 #$ -N gtgvcf
 #$ -o gtgvcfout
