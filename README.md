@@ -1,4 +1,4 @@
-# bam_processing
+## bam_processing
 Process SAM/BAM files accroding to the 1k genomes methods
 
 The 1,000 genomes project has posted its [bam processing methods](https://github.com/igsr/1000Genomes_data_indexes/blob/master/historical_data/former_toplevel/README.alignment_data.md) online.
@@ -43,5 +43,10 @@ Once we have a set of gVCF files we can call GenotypeGVCFs to call variants whic
 \*.g.vcf file for each sample and a \*.vcf file containing the final variants.
 
 
+## Other options?
 
+Use **SLURM** instead of **SGE**?
+@zkamvar has created his own solution, called [read-processing](https://github.com/zkamvar/read-processing), for their HPC.
+Even if you don't use SLURM, its been my experience that his code typically provides solid solutions.
+Give it a look!
 
