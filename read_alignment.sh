@@ -54,7 +54,7 @@ date
 echo
 
 myEpoch=(`date +%s`)
-echo "Epoch start:" $mySec
+echo "Epoch start:" $myEpoch
 
 # http://bio-bwa.sourceforge.net/bwa.shtml
 # Align reads with bwa.
@@ -196,6 +196,6 @@ echo $CMD
 eval $CMD
 
 myEpoch=(`date +%s`)
-echo "Epoch end:" $mySec
+echo "Epoch start:" $myEpoch
 
 # EOF.
