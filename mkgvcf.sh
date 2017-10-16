@@ -35,6 +35,9 @@ echo "SGE job id: $JOB_ID"
 date
 echo
 
+myEpoch=(`date +%s`)
+echo "Epoch start:" $mySec
+
 CMD="$JAVA -version 2>&1"
 echo $CMD
 eval $CMD
@@ -90,5 +93,8 @@ CMD="$JAVA -Djava.io.tmpdir=/data/ -jar $GATK \
 echo
 date
 echo "mkgvcf finished."
+
+myEpoch=(`date +%s`)
+echo "Epoch end:" $mySec
 
 # EOF.
