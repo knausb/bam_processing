@@ -36,7 +36,7 @@ date
 echo
 
 myEpoch=(`date +%s`)
-echo "Epoch start:" $mySec
+echo "Epoch start:" $myEpoch
 
 CMD="$JAVA -version 2>&1"
 echo $CMD
@@ -95,6 +95,6 @@ date
 echo "mkgvcf finished."
 
 myEpoch=(`date +%s`)
-echo "Epoch end:" $mySec
+echo "Epoch start:" $myEpoch
 
 # EOF.
