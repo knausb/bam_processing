@@ -53,6 +53,9 @@ echo "SGE job id: $JOB_ID"
 date
 echo
 
+myEpoch=(`date +%s`)
+echo "Epoch start:" $mySec
+
 # http://bio-bwa.sourceforge.net/bwa.shtml
 # Align reads with bwa.
 
@@ -191,5 +194,8 @@ CMD="$SAMT stats bams/${arr[0]}_dupmrk.bam | gzip -c > bams/${arr[0]}_dupmrk_sta
 echo $CMD
 #
 eval $CMD
+
+myEpoch=(`date +%s`)
+echo "Epoch end:" $mySec
 
 # EOF.
