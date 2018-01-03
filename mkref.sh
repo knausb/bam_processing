@@ -18,19 +18,20 @@ PIC="~/bin/picard/picard-tools-2.5.0/picard.jar"
 
 SAMT="~/bin/samtools-1.3.1/samtools"
 
-REF="ref/hop.fa"
+REF="ref/hop"
+EXT=".fa"
 
 # https://software.broadinstitute.org/gatk/guide/article?id=2798
 
 
-CMD="$SAMT faidx $REF"
+CMD="$SAMT faidx $REF$EXT"
 
 echo $CMD
 eval $CMD
 
 
 CMD="$JAVA -jar $PIC CreateSequenceDictionary \
-    REFERENCE=$REF OUTPUT=$REF.dict"
+    REFERENCE=$REF$EXT OUTPUT=$REF.dict"
 
 echo $CMD
 eval $CMD
