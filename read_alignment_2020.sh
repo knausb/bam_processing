@@ -44,7 +44,10 @@ JAVA="/home/bpp/knausb/bin/javadir/jre1.8.0_25/bin/java"
 # Reference sequence
 #REF="/home/bpp/knausb/Grunwald_Lab/home/knausb/pinf_bwa/bwaref/pinf_super_contigs.fa"
 #
-REF="bwaref/pinfsc50b.fa"
+BREF="bwaref/pinfsc50b.fa"
+
+# GATK reference
+GREF="gatkref/pinfsc50b.fa"
 
 
 # The file samples.txt contains info about sample names and files.
@@ -77,6 +80,7 @@ echo "Epoch start:" $myEpoch
 # Align reads with bwa.
 
 # Report bwa version info.
+echo "bwa info"
 CMD="$BWA 2>&1"
 echo
 echo $CMD
@@ -85,18 +89,27 @@ echo
 
 # http://www.htslib.org/doc/
 # Echo samtools version info.
+echo "samtools info"
 CMD="$SAMT --version"
 echo
 eval $CMD
 echo
 
 # Picard version.
-CMD="$JAVA -jar $PIC MarkDuplicates --version 2>&1"
+echo "picard info"
+CMD="$JAVA -jar $PICARD MarkDuplicates --version 2>&1"
+echo $CMD
+eval $CMD
+echo
+
+echo "GATK info"
+CMD="~/bin/gatk4/gatk-4.1.4.1/gatk --version"
 echo $CMD
 eval $CMD
 echo
 
 # Java version.
+echo "java info"
 CMD="$JAVA -version 2>&1"
 echo $CMD
 eval $CMD
@@ -116,7 +129,7 @@ echo
 
 RG="@RG\tID:${arr[0]}\tLB:${arr[0]}\tPL:illumina\tSM:${arr[0]}\tPU:${arr[0]}"
 
-CMD="$BWA mem -M -R \"$RG\" $REF ${arr[1]} ${arr[2]} > sams/${arr[0]}.sam"
+CMD="$BWA mem -M -R \"$RG\" $BREF ${arr[1]} ${arr[2]} > sams/${arr[0]}.sam"
 
 echo
 #
@@ -132,6 +145,7 @@ date
 # Generate stats to validate the sam.
 CMD="$SAMT stats sams/${arr[0]}.sam | gzip -c > sams/${arr[0]}_stats.txt.gz"
 echo $CMD
+#
 eval $CMD
 echo
 
@@ -151,11 +165,11 @@ echo
 
 # Mark duplicates
 CMD="$JAVA -Djava.io.tmpdir=/data/ \
-     -jar $PIC MarkDuplicates \
+     -jar $PICARD MarkDuplicates \
      I=sams/${arr[0]}.sam \
      O=bams/${arr[0]}_dupmrk.bam \
-     MAX_FILE_HANDLES_FOR_READ_ENDS_MAP=1000 \
-     ASSUME_SORT_ORDER=coordinate \
+     MAX_FILE_HANDLES_FOR_READ_ENDS_MAP=8000 \
+     ASSUME_SORT_ORDER=unsorted \
      M=bams/${arr[0]}_marked_dup_metrics.txt"
 
 date
@@ -168,8 +182,9 @@ date
 # Sort
 CMD="$JAVA -Djava.io.tmpdir=/data/ \
      -jar $PICARD SortSam \
-     I=bams/${arr[0]}_mrkdup.bam \
+     I=bams/${arr[0]}_dupmrk.bam \
      O=bams/${arr[0]}_sorted.bam \
+     --TMP_DIR=/data/knausb \
      SORT_ORDER=coordinate"
 
 date
@@ -201,11 +216,10 @@ echo "Epoch start:" $myEpoch
 ##### ##### ##### ##### #####
 # Create gvcf
 
-CMD="$JAVA -Djava.io.tmpdir=/data/ \
-     $GATK -Xmx4 Haplotypecaller \
-   -R $REF \
+CMD="$GATK --java-options \"-Djava.io.tmpdir=/data/ -Xmx4g\" HaplotypeCaller \
+   -R $GREF \
    -I bams/${arr[0]}_sorted.bam \
-   -O gvcfs/${arr[0]}.g.vcf.gz \
+   -O gvcf/${arr[0]}.g.vcf.gz \
    -ERC GVCF"
 
 echo $CMD
