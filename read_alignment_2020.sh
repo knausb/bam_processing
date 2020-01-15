@@ -163,13 +163,29 @@ echo
 # If this is your case you may want to include:
 # READ_NAME_REGEX=null
 
+# Sort
+CMD="$JAVA -Djava.io.tmpdir=/data/ \
+     -jar $PICARD SortSam \
+     I=sams/${arr[0]}.sam \
+     O=bams/${arr[0]}_sorted.bam \
+     TMP_DIR=/data/ \
+     SORT_ORDER=coordinate"
+
+date
+echo
+echo $CMD
+#
+eval $CMD
+date
+
+
 # Mark duplicates
 CMD="$JAVA -Djava.io.tmpdir=/data/ \
      -jar $PICARD MarkDuplicates \
-     I=sams/${arr[0]}.sam \
+     I=bams/${arr[0]}_sorted.bam \
      O=bams/${arr[0]}_dupmrk.bam \
      MAX_FILE_HANDLES_FOR_READ_ENDS_MAP=8000 \
-     ASSUME_SORT_ORDER=unsorted \
+     ASSUME_SORT_ORDER=coordinate \
      M=bams/${arr[0]}_marked_dup_metrics.txt"
 
 date
@@ -179,20 +195,6 @@ echo $CMD
 eval $CMD
 date
 
-# Sort
-CMD="$JAVA -Djava.io.tmpdir=/data/ \
-     -jar $PICARD SortSam \
-     I=bams/${arr[0]}_dupmrk.bam \
-     O=bams/${arr[0]}_sorted.bam \
-     --TMP_DIR=/data/knausb \
-     SORT_ORDER=coordinate"
-
-date
-echo
-echo $CMD
-#
-eval $CMD
-date
 
 
 ##### ##### ##### ##### #####
@@ -204,7 +206,7 @@ eval $CMD
 date
 
 # Generate stats to validate the bam.
-CMD="$SAMT stats bams/${arr[0]}_sorted.bam | gzip -c > bams/${arr[0]}_sorted_stats.txt.gz"
+CMD="$SAMT stats bams/${arr[0]}_sorted.bam | gzip -c > bams/${arr[0]}_sorted_dupmark_stats.txt.gz"
 echo $CMD
 #
 eval $CMD
