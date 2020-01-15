@@ -44,3 +44,4 @@ echo $CMD
 eval $CMD
 
 date
+

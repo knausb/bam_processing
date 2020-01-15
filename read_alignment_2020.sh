@@ -1,4 +1,5 @@
 #!/bin/bash
+
 #$ -cwd
 #$ -S /bin/bash
 #$ -N align
@@ -128,6 +129,14 @@ date
 
 
 ##### ##### ##### ##### #####
+# Generate stats to validate the sam.
+CMD="$SAMT stats sams/${arr[0]}.sam | gzip -c > sams/${arr[0]}_stats.txt.gz"
+echo $CMD
+eval $CMD
+echo
+
+
+##### ##### ##### ##### #####
 # Mark duplicates and sort
 
 # Mark duplicates.
@@ -143,7 +152,7 @@ date
 # Mark duplicates
 CMD="$JAVA -Djava.io.tmpdir=/data/ \
      -jar $PIC MarkDuplicates \
-     I=bams/${arr[0]}_fixed.bam \
+     I=sams/${arr[0]}.sam \
      O=bams/${arr[0]}_dupmrk.bam \
      MAX_FILE_HANDLES_FOR_READ_ENDS_MAP=1000 \
      ASSUME_SORT_ORDER=coordinate \
@@ -158,9 +167,9 @@ date
 
 # Sort
 CMD="$JAVA -Djava.io.tmpdir=/data/ \
-     -jar picard.jar SortSam \
-     I=sams/${arr[0]}_mrkdup.sam \
-     O=sams/${arr[0]}_sorted.sam \
+     -jar $PICARD SortSam \
+     I=bams/${arr[0]}_mrkdup.bam \
+     O=bams/${arr[0]}_sorted.bam \
      SORT_ORDER=coordinate"
 
 date
@@ -171,77 +180,40 @@ eval $CMD
 date
 
 
-
-
-
-# view
-# -b       output BAM
-# -S       ignored (input format is auto-detected)
-# -u       uncompressed BAM output (implies -b)
-
-# sort
-# -n         Sort by read name
-# -o FILE  output file name [stdout]
-# -O FORMAT  Write output as FORMAT ('sam'/'bam'/'cram')   (either -O or
-# -T PREFIX  Write temporary files to PREFIX.nnnn.bam       -T is required)
-
-# fillmd (deprecated, see calmd)
-# -u       uncompressed BAM output (for piping)
-
-# calmd
-# -u       uncompressed BAM output (for piping)
-
-# Generate stats to validate the sam.
-#CMD="$SAMT stats sams/${arr[0]}.sam | gzip -c > sams/${arr[0]}_stats.txt.gz"
-#echo $CMD
-#eval $CMD
-
-# Fix mate information and add the MD tag.
-# http://samtools.github.io/hts-specs/
-# MD = String for mismatching positions
-# NM = Edit distance to the reference
-#CMD="$SAMT view -bSu sams/${arr[0]}.sam | $SAMT sort -n -O bam -o bams/${arr[0]}_nsort -T bams/${arr[0]}_nsort_tmp"
-#
-#echo $CMD
-#
-#eval $CMD
-
-# CMD="$SAMT fixmate -O bam bams/${arr[0]}_nsort /dev/stdout | $SAMT sort -O bam -o - -T bams/${arr[0]}_csort_tmp | $SAMT fillmd -u - $REF > bams/${arr[0]}_fixed.bam"
-# CMD="$SAMT fixmate -O bam bams/${arr[0]}_nsort /dev/stdout | $SAMT sort -O bam -o - -T bams/${arr[0]}_csort_tmp | $SAMT fillmd -u - $REF | $SAMT view -b > bams/${arr[0]}_fixed.bam"
-# CMD="$SAMT fixmate -O bam bams/${arr[0]}_nsort /dev/stdout | $SAMT sort -O bam -o - -T bams/${arr[0]}_csort_tmp | $SAMT calmd -u - $REF | $SAMT view -b > bams/${arr[0]}_fixed.bam"
-#CMD="$SAMT fixmate -O bam bams/${arr[0]}_nsort /dev/stdout | $SAMT sort -O bam -o - -T bams/${arr[0]}_csort_tmp | $SAMT calmd -b - $REF > bams/${arr[0]}_fixed.bam"
-
-#echo $CMD
-#eval $CMD
-
-# Generate stats to validate the bam.
-#CMD="$SAMT stats bams/${arr[0]}_fixed.bam | gzip -c > bams/${arr[0]}_fixed_stats.txt.gz"
-#echo $CMD
-#eval $CMD
-
-#echo
-#echo "Samtools done"
-#echo
-
-#date
-
-
-
-
+##### ##### ##### ##### #####
 # Index
-CMD="$SAMT index bams/${arr[0]}_dupmrk.bam"
+CMD="$SAMT index bams/${arr[0]}_sorted.bam"
 echo $CMD
 #
 eval $CMD
 date
 
 # Generate stats to validate the bam.
-CMD="$SAMT stats bams/${arr[0]}_dupmrk.bam | gzip -c > bams/${arr[0]}_dupmrk_stats.txt.gz"
+CMD="$SAMT stats bams/${arr[0]}_sorted.bam | gzip -c > bams/${arr[0]}_sorted_stats.txt.gz"
 echo $CMD
 #
 eval $CMD
 
 myEpoch=(`date +%s`)
 echo "Epoch start:" $myEpoch
+
+
+##### ##### ##### ##### #####
+# Create gvcf
+
+CMD="$JAVA -Djava.io.tmpdir=/data/ \
+     $GATK -Xmx4 Haplotypecaller \
+   -R $REF \
+   -I bams/${arr[0]}_sorted.bam \
+   -O gvcfs/${arr[0]}.g.vcf.gz \
+   -ERC GVCF"
+
+echo $CMD
+#
+eval $CMD
+
+myEpoch=(`date +%s`)
+echo "Epoch start:" $myEpoch
+
 
 # EOF.
