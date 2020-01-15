@@ -22,6 +22,8 @@ echo
 # http://bio-bwa.sourceforge.net/bwa.shtml
 BWA="~/bin/bwa-0.7.17/bwa"
 
+SAMT="~/bin/samtools-1.9/samtools-1.9/samtools "
+
 # MarkDuplicates (Picard)
 # SortSam (Picard)
 # https://gatk.broadinstitute.org/hc/en-us/articles/360037225972-MarkDuplicates-Picard-
@@ -30,7 +32,7 @@ BWA="~/bin/bwa-0.7.17/bwa"
 PICARD="~/bin/picard/picard_2.21.6/picard.jar"
 
 # https://gatk.broadinstitute.org/hc/en-us/sections/360007226651-Best-Practices-Workflows
-GATK=""
+GATK="~/bin/gatk4/gatk-4.1.4.1/gatk"
 
 JAVA="/home/bpp/knausb/bin/javadir/jre1.8.0_25/bin/java"
 
@@ -40,7 +42,8 @@ JAVA="/home/bpp/knausb/bin/javadir/jre1.8.0_25/bin/java"
 
 # Reference sequence
 #REF="/home/bpp/knausb/Grunwald_Lab/home/knausb/pinf_bwa/bwaref/pinf_super_contigs.fa"
-#REF="bwaref/pinfsc50b.fa"
+#
+REF="bwaref/pinfsc50b.fa"
 
 
 # The file samples.txt contains info about sample names and files.
@@ -79,9 +82,10 @@ echo $CMD
 eval $CMD
 echo
 
-# Java version.
-CMD="$JAVA -version 2>&1"
-echo $CMD
+# http://www.htslib.org/doc/
+# Echo samtools version info.
+CMD="$SAMT --version"
+echo
 eval $CMD
 echo
 
@@ -90,6 +94,13 @@ CMD="$JAVA -jar $PIC MarkDuplicates --version 2>&1"
 echo $CMD
 eval $CMD
 echo
+
+# Java version.
+CMD="$JAVA -version 2>&1"
+echo $CMD
+eval $CMD
+echo
+
 
 
 ##### ##### ##### ##### #####
@@ -129,6 +140,7 @@ date
 # If this is your case you may want to include:
 # READ_NAME_REGEX=null
 
+# Mark duplicates
 CMD="$JAVA -Djava.io.tmpdir=/data/ \
      -jar $PIC MarkDuplicates \
      I=bams/${arr[0]}_fixed.bam \
@@ -144,12 +156,12 @@ echo $CMD
 eval $CMD
 date
 
-
+# Sort
 CMD="$JAVA -Djava.io.tmpdir=/data/ \
      -jar picard.jar SortSam \
      I=sams/${arr[0]}_mrkdup.sam \
      O=sams/${arr[0]}_sorted.sam \
-     SORT_ORDER=coordinate
+     SORT_ORDER=coordinate"
 
 date
 echo
@@ -161,13 +173,6 @@ date
 
 
 
-
-# http://www.htslib.org/doc/
-# Echo samtools version info.
-#CMD="$SAMT --version"
-#echo
-#eval $CMD
-#echo
 
 # view
 # -b       output BAM
