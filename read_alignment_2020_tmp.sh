@@ -20,6 +20,9 @@ echo
 ##### ##### ##### ##### #####
 # User provided materials
 
+#EVAL="TRUE"
+EVAL="FALSE"
+
 # Reference sequence
 #REF="/home/bpp/knausb/Grunwald_Lab/home/knausb/pinf_bwa/bwaref/pinf_super_contigs.fa"
 #
@@ -149,7 +152,9 @@ CMD="$BWA mem -M -R \"$RG\" $BREF ${arr[1]} ${arr[2]} > "$TEMP${arr[0]}".sam"
 echo
 #
 echo $CMD
-#eval $CMD
+if [[ $EVAL == "TRUE" ]]; then
+  eval $CMD
+fi
 echo
 
 date
@@ -159,7 +164,9 @@ echo
 # Generate stats to validate the sam.
 CMD="$SAMT stats $TEMP${arr[0]}.sam | gzip -c > $TEMP${arr[0]}_stats.txt.gz"
 echo $CMD
-#eval $CMD
+if [[ $EVAL == "TRUE" ]]; then
+  eval $CMD
+fi
 echo
 
 
@@ -187,7 +194,9 @@ CMD="$JAVA -Djava.io.tmpdir=/data/ \
 date
 echo
 echo $CMD
-#eval $CMD
+if [[ $EVAL == "TRUE" ]]; then
+  eval $CMD
+fi
 echo
 date
 echo
@@ -215,7 +224,9 @@ echo
 #CMD="$SAMT index $TEMP${arr[0]}_sorted.bam"
 CMD="$SAMT index $TEMP${arr[0]}_dupmrk.bam"
 echo $CMD
-#eval $CMD
+if [[ $EVAL == "TRUE" ]]; then
+  eval $CMD
+fi
 echo
 date
 echo
@@ -224,7 +235,9 @@ echo
 # Generate stats to validate the bam.
 CMD="$SAMT stats $TEMP${arr[0]}_sorted.bam | gzip -c > $TEMP${arr[0]}_sorted_dupmark_stats.txt.gz"
 echo $CMD
-#eval $CMD
+if [[ $EVAL == "TRUE" ]]; then
+  eval $CMD
+fi
 
 #myEpoch=(`date +%s`)
 #echo "Epoch start:" $myEpoch
@@ -244,7 +257,9 @@ CMD="$GATK --java-options \"-Djava.io.tmpdir=/data/ -Xmx4g\" HaplotypeCaller \
 
 echo
 echo $CMD
-#eval $CMD
+if [[ $EVAL == "TRUE" ]]; then
+  eval $CMD
+fi
 echo
 
 ##### ##### ##### ##### #####
@@ -256,39 +271,57 @@ echo "Managing files"
 
 CMD="cp $TEMP${arr[0]}.sam ."
 echo $CMD
-#eval $CMD
+if [[ $EVAL == "TRUE" ]]; then
+  eval $CMD
+fi
 
 CMD="rm -f $TEMP${arr[0]}.sam"
 echo $CMD
-#eval $CMD
+if [[ $EVAL == "TRUE" ]]; then
+  eval $CMD
+fi
 
 CMD="cp $TEMP${arr[0]}_stats.txt.gz ."
 echo $CMD
-#eval $CMD
+if [[ $EVAL == "TRUE" ]]; then
+  eval $CMD
+fi
 
 CMD="rm -f $TEMP${arr[0]}_stats.txt.gz"
 echo $CMD
-#eval $CMD
+if [[ $EVAL == "TRUE" ]]; then
+  eval $CMD
+fi
 
 CMD="rm -f $TEMP${arr[0]}_sorted.bam"
 echo $CMD
-#eval $CMD
+if [[ $EVAL == "TRUE" ]]; then
+  eval $CMD
+fi
 
 CMD="rm -f $TEMP${arr[0]}_dupmrk.bam"
 echo $CMD
-#eval $CMD
+if [[ $EVAL == "TRUE" ]]; then
+  eval $CMD
+fi
 
 CMD="rm -f $TEMP${arr[0]}_dupmrk.bam.bai"
 echo $CMD
-#eval $CMD
+if [[ $EVAL == "TRUE" ]]; then
+  eval $CMD
+fi
 
 CMD="cp $TEMP${arr[0]}.g.vcf.gz ."
 echo $CMD
-#eval $CMD
+if [[ $EVAL == "TRUE" ]]; then
+  eval $CMD
+fi
 
 CMD="rm -f $TEMP${arr[0]}.g.vcf.gz"
 echo $CMD
-#eval $CMD
+if [[ $EVAL == "TRUE" ]]; then
+  eval $CMD
+fi
 
 
 ##### ##### ##### ##### #####
