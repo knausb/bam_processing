@@ -74,6 +74,10 @@ JAVA="/home/bpp/knausb/bin/javadir/jre1.8.0_25/bin/java"
 ##### ##### ##### ##### #####
 # Report what we ended up with
 
+echo "Evaluate: "$EVAL
+echo
+
+
 echo -n "Running on: "
 hostname
 echo "SGE job id: $JOB_ID"
@@ -132,7 +136,9 @@ echo "Begin processing."
 if [ ! -d "$TEMP" ]; then
   CMD="mkdir $TEMP"
   echo $CMD
-  #eval $CMD
+  if [[ $EVAL == "TRUE" ]]; then
+    eval $CMD
+  fi
 fi
 
 ##### ##### ##### ##### #####
