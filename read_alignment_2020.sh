@@ -75,6 +75,7 @@ echo
 
 myEpoch=(`date +%s`)
 echo "Epoch start:" $myEpoch
+startEpoch=$myEpoch
 
 # http://bio-bwa.sourceforge.net/bwa.shtml
 # Align reads with bwa.
@@ -145,8 +146,7 @@ date
 # Generate stats to validate the sam.
 CMD="$SAMT stats sams/${arr[0]}.sam | gzip -c > sams/${arr[0]}_stats.txt.gz"
 echo $CMD
-#
-eval $CMD
+#eval $CMD
 echo
 
 
@@ -199,14 +199,22 @@ date
 
 ##### ##### ##### ##### #####
 # Index
-CMD="$SAMT index bams/${arr[0]}_sorted.bam"
+
+#CMD="$SAMT index bams/${arr[0]}_sorted.bam"
+CMD="$SAMT index bams/${arr[0]}_dupmrk.bam"
+
 echo $CMD
 #
 eval $CMD
 date
 
 # Generate stats to validate the bam.
-CMD="$SAMT stats bams/${arr[0]}_sorted.bam | gzip -c > bams/${arr[0]}_sorted_dupmark_stats.txt.gz"
+#CMD="$SAMT stats bams/${arr[0]}_sorted.bam | gzip -c > bams/${arr[0]}_sorted_stats.txt.gz"
+CMD="$SAMT stats bams/${arr[0]}_dupmrk.bam | gzip -c > bams/${arr[0]}_sorted_stats.txt.gz"
+
+echo $CMD
+
+
 echo $CMD
 #
 eval $CMD
@@ -220,7 +228,7 @@ echo "Epoch start:" $myEpoch
 
 CMD="$GATK --java-options \"-Djava.io.tmpdir=/data/ -Xmx4g\" HaplotypeCaller \
    -R $GREF \
-   -I bams/${arr[0]}_sorted.bam \
+   -I bams/${arr[0]}_dupmrk.bam \
    -O gvcf/${arr[0]}.g.vcf.gz \
    -ERC GVCF"
 
@@ -231,5 +239,6 @@ eval $CMD
 myEpoch=(`date +%s`)
 echo "Epoch start:" $myEpoch
 
+date
 
 # EOF.

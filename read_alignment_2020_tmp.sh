@@ -239,7 +239,7 @@ echo
 
 
 # Generate stats to validate the bam.
-CMD="$SAMT stats $TEMP${arr[0]}_sorted.bam | gzip -c > $TEMP${arr[0]}_sorted_dupmark_stats.txt.gz"
+CMD="$SAMT stats $TEMP${arr[0]}_dupmark.bam | gzip -c > $TEMP${arr[0]}_dupmark_stats.txt.gz"
 echo $CMD
 if [[ $EVAL == "TRUE" ]]; then
   eval $CMD
