@@ -159,7 +159,8 @@ echo
 # One thing MarkDuplicates attempts is to identify reads that were physically
 # close to one another on the flow cell.
 # If you got your reads from an online database this information may have been
-# removed from each sequence's header.
+# removed from each sequence's he:w
+ader.
 # If this is your case you may want to include:
 # READ_NAME_REGEX=null
 
