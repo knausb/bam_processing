@@ -48,12 +48,26 @@ echo
 # https://www.broadinstitute.org/gatk/documentation/tooldocs/org_broadinstitute_gatk_tools_walkers_haplotypecaller_HaplotypeCaller.php
 # https://www.broadinstitute.org/gatk/documentation/tooldocs/org_broadinstitute_gatk_tools_walkers_variantutils_GenotypeGVCFs.php
 
-CMD="$JAVA -Djava.io.tmpdir=/data/ \
-  -jar $GATK \
-  -T GenotypeGVCFs \
+
+# https://gatk.broadinstitute.org/hc/en-us/articles/360037427071-CombineGVCFs
+
+CMD="$GATK --java-options \"-Djava.io.tmpdir=/data/ -Xmx4g\" CombineGVCFs \
+     -R $REF \
+     -L Supercontig_1.$SGE_TASK_ID \
+     -TMP_DIR /data/ \
+     --variant sample1.g.vcf.gz \
+     --variant sample2.g.vcf.gz \
+     -O gvcfs/cohort_$SGE_TASK_ID.g.vcf.gz"
+
+echo $CMD
+eval $CMD
+
+# https://gatk.broadinstitute.org/hc/en-us/articles/360037057852-GenotypeGVCFs
+
+CMD="$GATK --java-options \"-Djava.io.tmpdir=/data/ -Xmx4g\" GenotypeGVCFs \
   -R $REF \
-  -L Supercontig_1.$SGE_TASK_ID \
-  -V gvcfs.list \
+  -TMP_DIR /data/ \
+  -V gvcfs/cohort_$SGE_TASK_ID.g.vcf.gz\
   -o vcfs/sc_1.$SGE_TASK_ID.vcf.gz"
 
 echo $CMD
